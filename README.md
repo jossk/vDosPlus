@@ -7,4 +7,4 @@
  5. Fresh freetype lib now included and compiled;
  6. Directory bin included precompiled x64 vDosPlus.exe
  
-For build need VS2015 with command line compiler with setup environment.
+For build need VS2015 command line compiler.
