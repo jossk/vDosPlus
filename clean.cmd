@@ -1,1 +1,1 @@
-del *.obj *.lib vDosPlus.exe stdafx.pch winres.res
+del *.obj *.lib *.o vDosPlus.exe stdafx.pch winres.res

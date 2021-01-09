@@ -1,5 +1,5 @@
-del *.obj
-del *.lib
+call clean.cmd 
+
 cl /nologo /c /W3 /Za /Qpar /GS- /guard:cf- /GA /MT /EHsc /DWIN32 /DNDEBUG /D_WINDOWS /DFT2_BUILD_LIBRARY /D_CRT_SECURE_NO_DEPRECATE ^
 /Iinclude /Iinclude\freetype ^
 .\src\autofit\autofit.c ^
@@ -40,7 +40,6 @@ cl /nologo /c /W3 /Za /Qpar /GS- /guard:cf- /GA /MT /EHsc /DWIN32 /DNDEBUG /D_WI
 .\src\type1\type1.c ^
 .\src\cid\type1cid.c ^
 .\src\type42\type42.c ^
-.\src\winfonts\winfnt.c ^
-
+.\src\winfonts\winfnt.c
 
 lib /nologo /out:freetype.lib *.obj

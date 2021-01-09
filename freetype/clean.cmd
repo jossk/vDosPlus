@@ -1,1 +1,1 @@
-del *.obj *.lib
+del *.obj *.lib *.o *.a
