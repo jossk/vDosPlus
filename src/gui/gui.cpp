@@ -411,12 +411,12 @@ static bool blinkstate = false;
 
 static void showNotes(void)
 	{
-	if ((int)ShellExecute(NULL, "open", "sysnotes.txt", NULL, NULL, SW_SHOWNORMAL)<33)	// Open Notes file
+	if ((int64_t)ShellExecute(NULL, "open", "sysnotes.txt", NULL, NULL, SW_SHOWNORMAL)<33)	// Open Notes file
 		{
 		char exePath[260];
 		GetModuleFileName(NULL, exePath, sizeof(exePath)-5);
 		strcpy(strrchr(exePath, '\\')+1, "sysnotes.txt");
-		if ((int)ShellExecute(NULL, "open", exePath, NULL, NULL, SW_SHOWNORMAL)<33)
+		if ((int64_t)ShellExecute(NULL, "open", exePath, NULL, NULL, SW_SHOWNORMAL)<33)
 			{
 			if (autoHide) while (ShowCursor(true)<=0);
 			if (topwin)
@@ -499,7 +499,7 @@ static void dumpScreen(void)
 	return;
 	}
 
-void getClipboard(void)
+static void getClipboard(void)
 	{
 	if (OpenClipboard(NULL))
 		{	
@@ -1824,49 +1824,43 @@ bool getPadding(char *p)
 	return padding>=0;
 	}
 
-bool setColors(const char *colorArray, int n)
-	{
-	const char * nextRGB = colorArray;
-	Bit8u * altPtr = (Bit8u *)altBGR1;
-	int rgbVal[3];
-	for (int colNo = 0; colNo < (n>-1?1:16); colNo++)
-		{
-		if (n>-1) altPtr+=4*n;
-		if (sscanf(nextRGB, " ( %d , %d , %d)", &rgbVal[0], &rgbVal[1], &rgbVal[2]) == 3)	// Decimal: (red,green,blue)
-			{
-			for (int i = 0; i< 3; i++)
-				{
-				if (rgbVal[i] < 0 || rgbVal[i] >255)
-					return false;
-				altPtr[2-i] = rgbVal[i];
-				}
-			while (*nextRGB != ')')
-				nextRGB++;
-			nextRGB++;
-			}
-		else if (sscanf(nextRGB, " #%6x", &rgbVal[0]) == 1)							// Hexadecimal
-			{
-			if (rgbVal < 0)
-				return false;
-			for (int i = 0; i < 3; i++)
-				{
-				altPtr[i] = rgbVal[0]&255;
-				rgbVal[0] >>= 8;
-				}
-			nextRGB = strchr(nextRGB, '#') + 7;
-			}
-		else
-			return false;
-		altPtr += 4;
-		}
-	for (int i = n>-1?n:0; i < (n>-1?n+1:16); i++)
-		{
-		altBGR0[i].rgbBlue = (altBGR1[i].rgbBlue*2 + 128)/4;
-		altBGR0[i].rgbGreen = (altBGR1[i].rgbGreen*2 + 128)/4;
-		altBGR0[i].rgbRed = (altBGR1[i].rgbRed*2 + 128)/4;
-		}
-	return true;
-	}
+bool setColors(const char *colorArray, int n) {
+    const char *nextRGB = colorArray;
+    Bit8u *altPtr = (Bit8u *)altBGR1;
+
+    int rgbVal[3];
+    for (int colNo = 0; colNo < (n > -1 ? 1 : 16); colNo++) {
+        if (n > -1) altPtr += 4 * n;
+        if (sscanf(nextRGB, " ( %d , %d , %d)", &rgbVal[0], &rgbVal[1], &rgbVal[2]) == 3)    // Decimal: (red,green,blue)
+        {
+            for (int i = 0; i < 3; i++) {
+                if (rgbVal[i] < 0 || rgbVal[i] > 255)
+                    return false;
+                altPtr[2 - i] = rgbVal[i];
+            }
+            while (*nextRGB != ')')
+                nextRGB++;
+            nextRGB++;
+        } else if (sscanf(nextRGB, " #%6x", &rgbVal[0]) == 1)                            // Hexadecimal
+        {
+            if (rgbVal[0] < 0)
+                return false;
+            for (int i = 0; i < 3; i++) {
+                altPtr[i] = rgbVal[0] & 255;
+                rgbVal[0] >>= 8;
+            }
+            nextRGB = strchr(nextRGB, '#') + 7;
+        } else
+            return false;
+        altPtr += 4;
+    }
+    for (int i = n > -1 ? n : 0; i < (n > -1 ? n + 1 : 16); i++) {
+        altBGR0[i].rgbBlue = (altBGR1[i].rgbBlue * 2 + 128) / 4;
+        altBGR0[i].rgbGreen = (altBGR1[i].rgbGreen * 2 + 128) / 4;
+        altBGR0[i].rgbRed = (altBGR1[i].rgbRed * 2 + 128) / 4;
+    }
+    return true;
+}
 
 void GUI_StartUp()
 	{
@@ -1893,11 +1887,11 @@ void GUI_StartUp()
 		sstate = si.wShowWindow == SW_MAXIMIZE ? 1 : (si.wShowWindow == SW_MINIMIZE || si.wShowWindow == SW_SHOWMINNOACTIVE ? 2 : 0);
 	HICON IcoHwnd = getIcon(lTrim(ConfGetString("ICON")), true);
 	if (IcoHwnd) 
-		SetClassLongPtr(vDosHwnd, GCLP_HICON, (LONG)IcoHwnd); // Set external icon
+		SetClassLongPtr(vDosHwnd, GCLP_HICON, (LONG_PTR)IcoHwnd); // Set external icon
 	else
 		{
 		ConfAddError("The specified icon is invalid:\n", lTrim(ConfGetString("ICON")));
-		SetClassLong(vDosHwnd, GCLP_HICON, (LONG)LoadIcon(GetModuleHandle(NULL), "vDosPlus_ico"));	// Set vDosPlus icon
+		SetClassLong(vDosHwnd, GCLP_HICON, (LONG_PTR)LoadIcon(GetModuleHandle(NULL), "vDosPlus_ico"));	// Set vDosPlus icon
 		}
 	if (strlen(lTrim(ConfGetString("font")))<260)
 		strcpy(fName, lTrim(ConfGetString("font")));
@@ -2181,7 +2175,7 @@ void GUI_StartUp()
 
 
 static int winMovingX, winMovingY = 0, prescr = 0, incaps = 0, calock = 0, nulock = 0, sclock = 0, nucount = 0, cacount = 0, sccount = 0;
-static bool winMoving = false, kbset = false, prevfocus = true, lfocus = true, rfocus = true, ftime = false;
+static bool winMoving = false, kbset = false, prevfocus = true, lfocus = true, rfocus = true, ftime1 = false;
 extern bool keystate;
 DWORD lasttime = 0;
 userAction buAct;
@@ -2326,10 +2320,10 @@ void HandleUserActions()
 				else
 					continue;
 				}
-			if (uAct.type!=WM_KEYUP&&GetTickCount()>=lasttime+keyinter+(ftime?keydelay:0))
+			if (uAct.type!=WM_KEYUP&&GetTickCount()>=lasttime+keyinter+(ftime1?keydelay:0))
 				{
 				uAct=buAct;
-				ftime=false;
+				ftime1=false;
 				}
 			else if (uAct.type==WM_CLOSE||uAct.type==WM_KEYDOWN&&!(p&&uAct.scancode!=buAct.scancode))
 				continue;
@@ -2678,7 +2672,7 @@ void HandleUserActions()
 			if (!bkey&&uAct.scancode!=29&&uAct.scancode!=42&&uAct.scancode!=54&&uAct.scancode!=56&&!(uAct.flags&2)) {
 				bkey=true;
 				buAct=uAct;
-				ftime=true;
+				ftime1=true;
 			}
 			lasttime=GetTickCount();
 		case WM_KEYUP:
@@ -2699,7 +2693,7 @@ void HandleUserActions()
 			if (uAct.type==WM_KEYUP)
 			{
 				bkey=false;
-				ftime=false;
+				ftime1=false;
 			}
 			// [Left or Right Alt][Enter] switches from window to "fullscreen"
 		    if (uAct.type == WM_KEYDOWN && uAct.scancode == 28 && uAct.flags1&0x08)

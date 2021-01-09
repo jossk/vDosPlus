@@ -23,3 +23,17 @@
 #include <mmsystem.h>
 #include <shellapi.h>
 #include <shlwapi.h>
+
+// mingw++
+
+#ifndef WM_MOUSEHWHEEL
+#define WM_MOUSEHWHEEL                  0x020E
+#endif
+
+#ifndef max
+#define max(a,b) (((a) > (b)) ? (a) : (b))
+#endif
+
+#ifndef min
+#define min(a,b) (((a) < (b)) ? (a) : (b))
+#endif

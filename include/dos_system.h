@@ -192,7 +192,7 @@ public:
 
     bool Rename(char *oldname, char *newname);
 
-    bool TestDir(char *dir);
+    bool TestDir(const char *dir);
 
     char *GetWinDir(void) { return basedir; };
 

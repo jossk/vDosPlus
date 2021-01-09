@@ -14,7 +14,7 @@ static Bitu shellstop_handler(void) {
     return CBRET_STOP;
 }
 
-void Execute(char *name, char *args) {
+void Execute(const char *name, const char *args) {
     reg_sp -= 0x200;                                                                // Allocate some stack space for tables in physical memory
 
     DOS_ParamBlock block(SegPhys(ss) + reg_sp);                                        // Add Parameter block

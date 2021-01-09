@@ -38,7 +38,7 @@ void RunPC();
 bool ConfGetBool(const char *name);
 int ConfGetInt(const char *name);
 char * ConfGetString(const char *name);
-void ConfAddError(char* desc, char* errLine);
+void ConfAddError(const char* desc, char* errLine);
 void vDos_Init(void);
 
 void INT2F_Cont(void);

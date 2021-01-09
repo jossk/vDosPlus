@@ -45,7 +45,7 @@ static void Unicode2Ascii(Bit16u *unicode) {
     return;                                                                            // clipAscii dould be downsized, but of no real interest
 }
 
-bool getClipboard() {
+static bool getClipboard() {
     if (clipAscii) {
         free(clipAscii);
         clipAscii = NULL;
@@ -463,7 +463,7 @@ Bit16u device_PRT::GetInformation(void) {
     return 0x80E0;                                                                    // dBase IV checks for not ready
 }
 
-static char *PD_select[] = {"/SEL", "/PDF", "/RTF"};
+static const char *PD_select[] = {"/SEL", "/PDF", "/RTF"};
 static char DP_lCode[] = "  ";
 
 device_PRT::device_PRT(const char *pname, const char *cmd) {
@@ -531,7 +531,7 @@ device_PRT::device_PRT(const char *pname, const char *cmd) {
                 int langID =
                         GetSystemDefaultLangID() & 0x1ff;                        // Determine UI language for DOSPrinter
                 int suppID[] = {0x16, 0x0a, 0x0c, 0x1a, 0x1b, 0x24, 0x0e, 0x10, 0x03, 0x13, 0x07, 0x00};
-                char *suppLN[] = {"PT", "ES", "FR", "HR", "SI", "SI", "HU", "IT", "CA", "NL", "DE"};
+                const char *suppLN[] = {"PT", "ES", "FR", "HR", "SI", "SI", "HU", "IT", "CA", "NL", "DE"};
                 DP_lCode[0] = 'x';
                 for (int i = 0;
                      suppID[i] != 0; i++)                                // LCIDToLocaleName not supported in Win XP
@@ -545,7 +545,7 @@ device_PRT::device_PRT(const char *pname, const char *cmd) {
         }
         destination += " ";
         destination += tmpAscii;
-        delete upperDest;
+        delete[] upperDest;
     }
 }
 

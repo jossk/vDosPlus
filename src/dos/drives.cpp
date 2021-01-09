@@ -624,7 +624,7 @@ bool DOS_Drive::Rename(char* oldname, char* newname)
 	return false;
 	}
 
-bool DOS_Drive::TestDir(char* dir)
+bool DOS_Drive::TestDir(const char* dir)
 	{
 	char win_dir[MAX_PATH_LEN];
 	strcat(strcpy(win_dir, basedir), dir);

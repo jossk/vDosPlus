@@ -182,40 +182,40 @@ static char confStrings[MAXSTRLEN];
 static unsigned int confStrOffset = 0;												// Offset to store new strings
 static char errorMess[600];
 
-static struct
-{
-char name[LENNAME+1];
-Vtype type;
-bool set;
-union {bool _bool; int _int; char * _string;}value;
+static struct {
+    char name[LENNAME + 1];
+    Vtype type;
+    bool set;
+    union {
+        bool _bool;
+        int _int;
+        char *_string;
+    } value;
 } ConfSetting[MAXNAMES];
 
 char cfgname[MAXNAMES][LENNAME],cfgval[MAXNAMES][255],configfile[255]="CONFIG.TXT";
 
 // No checking on add/get functions, we call them ourselves...
-void ConfAddBool(const char *name, bool value)
-	{
-	strcpy(ConfSetting[confEntries].name, name);
-	ConfSetting[confEntries].type = V_BOOL;
-	ConfSetting[confEntries].value._bool = value;
-	confEntries++;
-	}
+void ConfAddBool(const char *name, bool value) {
+    strcpy(ConfSetting[confEntries].name, name);
+    ConfSetting[confEntries].type = V_BOOL;
+    ConfSetting[confEntries].value._bool = value;
+    confEntries++;
+}
 
-void ConfAddInt(const char *name, int value)
-	{
-	strcpy(ConfSetting[confEntries].name, name);
-	ConfSetting[confEntries].type = V_INT;
-	ConfSetting[confEntries].value._int = value;
-	confEntries++;
-	}
-	
-void ConfAddString(const char *name, char* value)
-	{
-	strcpy(ConfSetting[confEntries].name, name);
-	ConfSetting[confEntries].type = V_STRING;
-	ConfSetting[confEntries].value._string = value;
-	confEntries++;
-	}
+void ConfAddInt(const char *name, int value) {
+    strcpy(ConfSetting[confEntries].name, name);
+    ConfSetting[confEntries].type = V_INT;
+    ConfSetting[confEntries].value._int = value;
+    confEntries++;
+}
+
+void ConfAddString(const char *name, char *value) {
+    strcpy(ConfSetting[confEntries].name, name);
+    ConfSetting[confEntries].type = V_STRING;
+    ConfSetting[confEntries].value._string = value;
+    confEntries++;
+}
 
 static int findEntry(const char *name)
 	{
@@ -224,30 +224,27 @@ static int findEntry(const char *name)
 			return found;
 	return -1;
 	}
-	
-bool ConfGetBool(const char *name)
-	{
-	int entry = findEntry(name);
-	if (entry >= 0)
-		return ConfSetting[entry].value._bool;
-	return false;																	// To satisfy compiler
-	}
 
-int ConfGetInt(const char *name)
-	{
-	int entry = findEntry(name);
-	if (entry >= 0)
-		return ConfSetting[entry].value._int;
-	return 0;																		// To satisfy compiler
-	}
+bool ConfGetBool(const char *name) {
+    int entry = findEntry(name);
+    if (entry >= 0)
+        return ConfSetting[entry].value._bool;
+    return false;                                                                    // To satisfy compiler
+}
 
-char * ConfGetString(const char *name)
-	{
-	int entry = findEntry(name);
-	if (entry >= 0)
-		return ConfSetting[entry].value._string;
-	return "";																		// To satisfy compiler
-	}
+int ConfGetInt(const char *name) {
+    int entry = findEntry(name);
+    if (entry >= 0)
+        return ConfSetting[entry].value._int;
+    return 0;                                                                        // To satisfy compiler
+}
+
+char *ConfGetString(const char *name) {
+    int entry = findEntry(name);
+    if (entry >= 0)
+        return ConfSetting[entry].value._string;
+    return "";                                                                        // To satisfy compiler
+}
 	
 static char* ConfSetValue(const char* name, char* value)
 	{
@@ -326,7 +323,7 @@ static char * ParseConfigLine(char *line)
 	return ConfSetValue(name, val);
 	}
 
-void ConfAddError(char* desc, char* errLine)
+void ConfAddError(const char* desc, char* errLine)
 	{
 	static bool addMess = true;
 	if (addMess)

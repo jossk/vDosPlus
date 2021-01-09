@@ -88,6 +88,8 @@ Bit8u FCB_Parsename(Bit16u seg, Bit16u offset, Bit8u parser, char *string, Bit8u
             ret = 0xff;
         string += 2;
     }
+    Bit8u fill = ' ';
+    Bitu index = 0;
     if (string[0] == '.')                                                           // Special checks for . and ..
     {
         string++;
@@ -109,8 +111,6 @@ Bit8u FCB_Parsename(Bit16u seg, Bit16u offset, Bit8u parser, char *string, Bit8u
         goto savefcb;
     hasname = true;                                                                 // Copy the name
     finished = false;
-    Bit8u fill = ' ';
-    Bitu index = 0;
     while (index < 8) {
         if (!finished) {
             if (string[0] == '*') {

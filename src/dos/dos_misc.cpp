@@ -468,7 +468,7 @@ static void CLI_SET(char *comLine)													// Syntax in 4DOS: set <name>=<%%
 		}
 	}
 
-static void showCfg(char* args, char* cfg)
+static void showCfg(char* args, const char* cfg)
 	{
 	if (!*args) Display("%s=", cfg);
 	if (!*args||!stricmp(args,cfg))
@@ -1069,13 +1069,13 @@ static void CLI_SETCFG(char * args)
 					bool fs=vga.mode==M_TEXT&&ttf.fullScrn;
 					if (fs) minWin();
 					if (window.framed)
-						SetClassLongPtr(vDosHwnd, GCLP_HICON, (LONG)IcoHwnd);
+						SetClassLongPtr(vDosHwnd, GCLP_HICON, (LONG_PTR)IcoHwnd);
 					else
 						{
 						window.framed=true;
 						BOOL res=GetWindowRect(vDosHwnd, &rect);
 						resetWin();
-						SetClassLongPtr(vDosHwnd, GCLP_HICON, (LONG)IcoHwnd);
+						SetClassLongPtr(vDosHwnd, GCLP_HICON, (LONG_PTR)IcoHwnd);
 						window.framed=false;
 						resetWin();
 						RECT newrect;
@@ -1520,7 +1520,7 @@ static struct {
 	"ABOUT",	CLI_ABOUT
 }; 
 
-static void INT2F_Cont()
+void INT2F_Cont()
 	{
 	if (reg_dx == 0xffff)															// First magic value
 		{

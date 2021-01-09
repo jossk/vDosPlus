@@ -99,10 +99,9 @@ enum {
 	t_LASTFLAG
 };
 
-static inline void DestroyConditionFlags(void)
-	{
+inline void DestroyConditionFlags(void)	{
 	lflags.type = t_UNKNOWN;
-	}
+}
 
 
 #endif

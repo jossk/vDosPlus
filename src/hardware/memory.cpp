@@ -404,7 +404,7 @@ void Mem_rStos4b(LinPt addr, Bit32u val32,
         addr += bTodo;
         if (ph->flags & PFLAG_WRITEABLE) {
             HostPt hPtr = ph->GetHostPt(physAddr);
-            while ((Bit32u) (hPtr) & 3)                                                // Align start address to 32 bit
+            while (((Bit64u) (hPtr)) & 3)                                                // Align start address to 32 bit
             {
                 *(hPtr++) = val32 & 0xff;
                 val32 = _rotr(val32, 8);
