@@ -8,5 +8,8 @@
  6. Directory bin included precompiled Windows x64/x32 vDosPlus.exe
  7. Include orignial sources and binaries.
  
-For build need VS2015 command line compiler.
+For build need VS2015/VS2017/VS2019 command line compiler + winkit-10.0.10586.0
+OR
+Mingw/Clang distro from http://winlibs.com/
+
 PS CMakeLists.txt configurer as CLion project.
